@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-python:
+    name: Lint Python (ruff)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v0.5.4
+        with:
+          args: 'check --output-format=github'
+      - uses: astral-sh/ruff-action@v0.5.4
+        with:
+          args: 'format --check --diff'
+
+  gitleaks:
+    name: Secret scan
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  colcon-build:
+    name: colcon build (Humble, ARM64 simulation on x86)
+    runs-on: ubuntu-22.04
+    container:
+      image: arm64v8/ros:humble-ros-base
+    steps:
+      - uses: actions/checkout@v4
+      - name: Source ROS 2
+        run: |
+          source /opt/ros/humble/setup.bash
+      - name: Install dependencies
+        run: |
+          apt-get update -q
+          apt-get install -y --no-install-recommends \
+              python3-colcon-common-extensions \
+              python3-rosdep
+          source /opt/ros/humble/setup.bash
+          rosdep update
+          rosdep install --from-paths src --ignore-src -r -y --rosdistro=humble \
+              --skip-keys="cyclonedds rtabmap zed-wrapper"  # external apt packages
+      - name: Build
+        run: |
+          source /opt/ros/humble/setup.bash
+          colcon build --symlink-install \
+              --cmake-args -DCMAKE_BUILD_TYPE=Release \
+              --packages-up-to imp2_bringup imp2_msgs imp2_imu imp2_safety imp2_diagnostics

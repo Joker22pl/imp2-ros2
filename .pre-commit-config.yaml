@@ -1,0 +1,48 @@
+# Pre-commit hooks (https://pre-commit.com/)
+# Install: pip install pre-commit && pre-commit install
+# Per HEOS decision 004 (cookiecutter-i-pre-commit)
+# All 3 IMP2 repos share the same baseline hooks.
+
+repos:
+  # 1. Trailing whitespace (cut at end of line)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        # Markdown lines ending in 2 spaces are hard line breaks — don't strip
+        exclude: '\.md$'
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: check-added-large-files
+        args: ['--maxkb=1024']
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+      - id: no-commit-to-branch
+        args: ['--branch=main']
+
+  # 2. Gitleaks — secret detection
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+
+  # 3. Markdown linting (per language)
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.41.0
+    hooks:
+      - id: markdownlint
+        args: ['--fix']
+
+  # 4. Python (only imp2-ros2 + imp2-arch scripts; imp2-firmware uses C)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.8
+    hooks:
+      - id: ruff
+        args: ['--fix', '--exit-non-zero-on-fix']
+        types_or: [python, pyi]
+      - id: ruff-format
+        types_or: [python, pyi]
