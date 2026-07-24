@@ -1,0 +1,35 @@
+# ROS 2 build artifacts
+install/
+build/
+log/
+.ros/
+*.bag
+*.bag.active
+
+# Editor
+*.swp
+*.swo
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+
+# Secrets (NEVER commit)
+*.pem
+*.key
+secrets.yaml
+google-services.json
+
+# Markdown artifacts
+*~
+*.tmp

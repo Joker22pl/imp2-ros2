@@ -30,6 +30,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'estop_bridge = imp2_safety.estop_bridge:main',
+            'heartbeat_monitor = imp2_safety.heartbeat_monitor:main',
+            'safety_state = imp2_safety.safety_state:main',
         ],
     },
 )

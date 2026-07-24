@@ -30,6 +30,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'battery_monitor = imp2_diagnostics.battery_monitor:main',
+            'cpu_temp_monitor = imp2_diagnostics.cpu_temp_monitor:main',
         ],
     },
 )
