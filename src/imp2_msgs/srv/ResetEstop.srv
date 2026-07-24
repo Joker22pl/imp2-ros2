@@ -1,0 +1,5 @@
+# Manual reset from ESTOP / FAULT state
+string confirm_token
+---
+bool success
+string message

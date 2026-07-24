@@ -1,0 +1,20 @@
+# IMP2 bringup configuration
+imp2_bringup:
+  ros_domain_id: 0
+  use_sim: false
+  use_nav: true
+  use_teleop: true
+
+  # Topic namespaces
+  cmd_vel_topic: '/cmd_vel'
+  odom_topic: '/odom'
+  battery_topic: '/battery_state'
+  diagnostics_topic: '/diagnostics'
+  heartbeat_topic: '/firmware/heartbeat'
+  estop_topic: '/emergency_stop'
+
+  # Safety
+  heartbeat_timeout_ms: 200
+  heartbeat_rate_hz: 50
+  watchdog_timeout_ms: 3000
+  iwdt_timeout_ms: 5000
